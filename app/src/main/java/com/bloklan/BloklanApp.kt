@@ -7,7 +7,7 @@ class BloklanApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // Initialize repository singleton
-        AppRepository.instance
+        // Initialize repository singleton with context
+        AppRepository.instance.init(this)
     }
 }

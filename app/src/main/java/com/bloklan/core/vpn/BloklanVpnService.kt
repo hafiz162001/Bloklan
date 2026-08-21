@@ -82,6 +82,18 @@ class BloklanVpnService : VpnService() {
                 e.printStackTrace()
             }
 
+            // Disallow user-selected bypass apps (Split Tunneling)
+            val excludedApps = repository.excludedPackages.value
+            for (pkg in excludedApps) {
+                if (pkg != packageName) {
+                    try {
+                        builder.addDisallowedApplication(pkg)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
             vpnInterface = builder.establish()
             if (vpnInterface == null) {
                 stopVpn()

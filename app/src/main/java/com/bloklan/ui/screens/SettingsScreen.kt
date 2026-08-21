@@ -63,10 +63,17 @@ import com.bloklan.ui.theme.TextMuted
 import com.bloklan.ui.theme.TextPrimary
 import com.bloklan.ui.theme.TextSecondary
 
+import androidx.compose.material.icons.automirrored.filled.AltRoute
+import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.Apps
+
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    onNavigateToAppBypass: () -> Unit = {}
+) {
     val repository = AppRepository.instance
     val selectedDns by repository.selectedDns.collectAsState()
+    val excludedPackages by repository.excludedPackages.collectAsState()
     val context = LocalContext.current
 
     var showCustomDnsDialog by remember { mutableStateOf(false) }
@@ -95,6 +102,79 @@ fun SettingsScreen() {
         )
 
         Spacer(modifier = Modifier.height(20.dp))
+
+        // Section: Advanced / Bypass Feature
+        Text(
+            text = "KONTROL TRAFIK & APLIKASI",
+            color = PrimaryNeon,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 1.sp
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onNavigateToAppBypass() },
+            shape = RoundedCornerShape(14.dp),
+            colors = CardDefaults.cardColors(containerColor = CardBgDark),
+            border = androidx.compose.foundation.BorderStroke(1.dp, CardBorderDark)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 14.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(PrimaryNeon.copy(alpha = 0.15f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.AltRoute,
+                            contentDescription = "App Bypass",
+                            tint = PrimaryNeon,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column {
+                        Text(
+                            text = "Bypass Aplikasi (Split Tunneling)",
+                            color = TextPrimary,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = if (excludedPackages.isEmpty()) {
+                                "Kecualikan app m-Banking / streaming dari VPN"
+                            } else {
+                                "${excludedPackages.size} aplikasi dikecualikan dari VPN"
+                            },
+                            color = if (excludedPackages.isEmpty()) TextMuted else SecondaryNeon,
+                            fontSize = 11.sp
+                        )
+                    }
+                }
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                    contentDescription = "Buka",
+                    tint = TextMuted,
+                    modifier = Modifier.size(14.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         // Section: Upstream DNS
         Text(

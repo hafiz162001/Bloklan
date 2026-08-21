@@ -38,6 +38,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bloklan.core.vpn.BloklanVpnService
 import com.bloklan.data.repository.AppRepository
+import com.bloklan.ui.screens.AppBypassScreen
 import com.bloklan.ui.screens.HomeScreen
 import com.bloklan.ui.screens.LogScreen
 import com.bloklan.ui.screens.RulesScreen
@@ -155,7 +156,18 @@ class MainActivity : ComponentActivity() {
                             RulesScreen()
                         }
                         composable(Screen.Settings.route) {
-                            SettingsScreen()
+                            SettingsScreen(
+                                onNavigateToAppBypass = {
+                                    navController.navigate("app_bypass")
+                                }
+                            )
+                        }
+                        composable("app_bypass") {
+                            AppBypassScreen(
+                                onNavigateBack = {
+                                    navController.popBackStack()
+                                }
+                            )
                         }
                     }
                 }

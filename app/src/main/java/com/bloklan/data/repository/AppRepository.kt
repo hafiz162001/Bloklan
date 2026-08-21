@@ -39,6 +39,36 @@ class AppRepository private constructor() {
     private val _customBlacklist = MutableStateFlow(ruleEngine.getCustomBlacklist())
     val customBlacklist: StateFlow<Set<String>> = _customBlacklist.asStateFlow()
 
+    private var sharedPrefs: android.content.SharedPreferences? = null
+    private val _excludedPackages = MutableStateFlow<Set<String>>(emptySet())
+    val excludedPackages: StateFlow<Set<String>> = _excludedPackages.asStateFlow()
+
+    fun init(context: android.content.Context) {
+        sharedPrefs = context.getSharedPreferences("bloklan_prefs", android.content.Context.MODE_PRIVATE)
+        val saved = sharedPrefs?.getStringSet("excluded_packages", emptySet()) ?: emptySet()
+        _excludedPackages.value = saved.toSet()
+    }
+
+    fun addExcludedPackage(packageName: String) {
+        val updated = _excludedPackages.value + packageName
+        _excludedPackages.value = updated
+        sharedPrefs?.edit()?.putStringSet("excluded_packages", updated)?.apply()
+    }
+
+    fun removeExcludedPackage(packageName: String) {
+        val updated = _excludedPackages.value - packageName
+        _excludedPackages.value = updated
+        sharedPrefs?.edit()?.putStringSet("excluded_packages", updated)?.apply()
+    }
+
+    fun toggleExcludedPackage(packageName: String) {
+        if (_excludedPackages.value.contains(packageName)) {
+            removeExcludedPackage(packageName)
+        } else {
+            addExcludedPackage(packageName)
+        }
+    }
+
     fun setVpnActive(active: Boolean) {
         _isVpnActive.value = active
         if (active && _stats.value.startTime == 0L) {

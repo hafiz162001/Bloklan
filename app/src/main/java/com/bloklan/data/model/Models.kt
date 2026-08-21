@@ -38,3 +38,11 @@ enum class FilterCategory(val displayName: String, val description: String, val 
     SOCIAL_TRACKERS("Pelacak Media Sosial", "Memblokir widget dan pelacak Facebook, TikTok, dll.", 850),
     MALWARE_PHISHING("Malware & Phishing", "Melindungi dari domain berbahaya dan penipuan", 2100)
 }
+
+data class BypassAppItem(
+    val packageName: String,
+    val appName: String,
+    val isSystemApp: Boolean = false,
+    val isBypassed: Boolean = false
+)
+
