@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Bloklan</string>
+    <string name="vpn_service_desc">Layanan DNS Sinkhole Lokal untuk Pemblokiran Iklan dan Pelacak</string>
+    <string name="notification_channel_name">Status Proteksi Bloklan</string>
+    <string name="notification_channel_desc">Menampilkan status aktif proteksi pemblokiran iklan</string>
+    <string name="protection_active">Proteksi Aktif</string>
+    <string name="protection_active_desc">Bloklan aktif memblokir iklan &amp; pelacak</string>
+</resources>
